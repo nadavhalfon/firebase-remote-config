@@ -97,44 +97,32 @@ export class FirebaseRemoteConfigWeb extends WebPlugin {
         }));
     }
     getBoolean(options) {
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            yield this.ready;
-            if (!this.remoteConfigRef) {
-                reject("Remote config is not initialized. Make sure initialize() is called at first.");
-                return;
-            }
-            resolve(this.remoteConfigRef.getValue(options.key).asBoolean());
-        }));
+        return this.getValue(options, "Boolean");
     }
     getByteArray(options) {
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            yield this.ready;
-            if (!this.remoteConfigRef) {
-                reject("Remote config is not initialized. Make sure initialize() is called at first.");
-                return;
-            }
-            resolve(this.remoteConfigRef.getValue(options.key).asString());
-        }));
+        // Should be deprecated 
+        // - was implemented as a string which ruined the data.
+        // - FB doesn't support byteArray - https://firebase.google.com/docs/reference/js/firebase.remoteconfig.RemoteConfig
+        return this.getString(options);
     }
     getNumber(options) {
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            yield this.ready;
-            if (!this.remoteConfigRef) {
-                reject("Remote config is not initialized. Make sure initialize() is called at first.");
-                return;
-            }
-            resolve(this.remoteConfigRef.getValue(options.key).asNumber());
-        }));
+        return this.getValue(options, "Number");
     }
     getString(options) {
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+        return this.getValue(options, "String");
+    }
+    getValue(options, format = null) {
+        return __awaiter(this, void 0, void 0, function* () {
             yield this.ready;
-            if (!this.remoteConfigRef) {
-                reject("Remote config is not initialized. Make sure initialize() is called at first.");
-                return;
-            }
-            resolve(this.remoteConfigRef.getValue(options.key).asString());
-        }));
+            if (!this.remoteConfigRef)
+                throw new Error("Remote config is not initialized. Make sure initialize() is called at first.");
+            const retVal = this.remoteConfigRef.getValue(options.key);
+            return {
+                key: options.key,
+                value: format ? retVal["as" + format]() : retVal._value,
+                source: retVal._source,
+            };
+        });
     }
     get remoteConfig() {
         return this.remoteConfigRef;
@@ -191,7 +179,8 @@ export class FirebaseRemoteConfigWeb extends WebPlugin {
         var tries = 100;
         return new Promise((resolve, reject) => {
             const interval = setInterval(() => {
-                if (window.firebase) {
+                var _a;
+                if ((_a = window.firebase) === null || _a === void 0 ? void 0 : _a.remoteConfig) {
                     clearInterval(interval);
                     resolve(null);
                 }

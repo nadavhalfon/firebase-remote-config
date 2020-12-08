@@ -1,5 +1,5 @@
 import { WebPlugin } from "@capacitor/core";
-import { FirebaseRemoteConfigPlugin, RCValueOption, RCReturnData, RCReturnDataArray, FirebaseInitOptions } from "./definitions";
+import { FirebaseRemoteConfigPlugin, RCValueOption, RCReturnData, FirebaseInitOptions } from "./definitions";
 export declare class FirebaseRemoteConfigWeb extends WebPlugin implements FirebaseRemoteConfigPlugin {
     readonly options_missing_mssg = "Firebase options are missing";
     readonly ready: Promise<any>;
@@ -15,9 +15,10 @@ export declare class FirebaseRemoteConfigWeb extends WebPlugin implements Fireba
     activate(): Promise<void>;
     fetchAndActivate(): Promise<void>;
     getBoolean(options: RCValueOption): Promise<RCReturnData>;
-    getByteArray(options: RCValueOption): Promise<RCReturnDataArray>;
+    getByteArray(options: RCValueOption): Promise<RCReturnData>;
     getNumber(options: RCValueOption): Promise<RCReturnData>;
     getString(options: RCValueOption): Promise<RCReturnData>;
+    getValue(options: RCValueOption, format?: 'String' | 'Number' | 'Boolean'): Promise<RCReturnData>;
     get remoteConfig(): any;
     /**
      * Configure and Initialize FirebaseApp if not present
