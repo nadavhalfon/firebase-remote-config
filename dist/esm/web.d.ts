@@ -18,7 +18,7 @@ export declare class FirebaseRemoteConfigWeb extends WebPlugin implements Fireba
     getByteArray(options: RCValueOption): Promise<RCReturnData>;
     getNumber(options: RCValueOption): Promise<RCReturnData>;
     getString(options: RCValueOption): Promise<RCReturnData>;
-    getValue(options: RCValueOption, format?: 'String' | 'Number' | 'Boolean'): Promise<RCReturnData>;
+    private getValue;
     get remoteConfig(): any;
     /**
      * Configure and Initialize FirebaseApp if not present
