@@ -7,13 +7,13 @@ Capacitor community plugin for firebase remote config.
 To use npm
 
 ```bash
-npm install @joinflux/firebase-remote-config
+npm install @nadavhalfon/firebase-remote-config
 ```
 
 To use yarn
 
 ```bash
-yarn add @joinflux/firebase-remote-config
+yarn add @nadavhalfon/firebase-remote-config
 ```
 
 Sync native files
@@ -39,7 +39,6 @@ public class MainActivity extends BridgeActivity {
     this.init(
         savedInstanceState,
         new ArrayList<Class<? extends Plugin>>() {
-
           {
             // Additional plugins you've installed go here
             // Ex: add(TotallyAwesomePlugin.class);
@@ -49,6 +48,7 @@ public class MainActivity extends BridgeActivity {
       );
   }
 }
+
 ```
 
 ## Configuration
@@ -79,7 +79,7 @@ it in the correct platform app directory.
 
 ```typescript
 // Must import the package once to make sure the web support initializes
-import "@joinflux/firebase-remote-config";
+import "@nadavhalfon/firebase-remote-config";
 
 import { Plugins } from "@capacitor/core";
 

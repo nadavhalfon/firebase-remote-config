@@ -1,6 +1,13 @@
 import { registerPlugin, WebPlugin } from "@capacitor/core";
-import firebase from "firebase";
-import "firebase/remote-config";
+import { FirebaseApp } from "@firebase/app";
+import {
+  activate,
+  fetchAndActivate,
+  fetchConfig,
+  getRemoteConfig,
+  getValue,
+  RemoteConfig,
+} from "firebase/remote-config";
 import type {
   FirebaseRemoteConfigPlugin,
   initOptions,
@@ -18,14 +25,14 @@ export class FirebaseRemoteConfigWeb
   extends WebPlugin
   implements FirebaseRemoteConfigPlugin
 {
-  private remoteConfigRef: firebase.remoteConfig.RemoteConfig;
+  private remoteConfigRef: RemoteConfig;
 
   constructor() {
     super();
   }
 
-  async initializeFirebase(app: firebase.app.App) {
-    this.remoteConfigRef = app.remoteConfig();
+  async initializeFirebase(app: FirebaseApp) {
+    this.remoteConfigRef = getRemoteConfig(app);
   }
 
   async setDefaultConfig(options: any): Promise<void> {
@@ -52,21 +59,21 @@ export class FirebaseRemoteConfigWeb
   async fetch(): Promise<void> {
     if (!this.remoteConfigRef) throw ErrRemoteConfigNotInitialiazed;
 
-    const data = await this.remoteConfigRef.fetch();
+    const data = await fetchConfig(this.remoteConfigRef);
     return data;
   }
 
   async activate(): Promise<void> {
     if (!this.remoteConfigRef) throw ErrRemoteConfigNotInitialiazed;
 
-    await this.remoteConfigRef.activate();
+    await activate(this.remoteConfigRef);
     return;
   }
 
   async fetchAndActivate(): Promise<void> {
     if (!this.remoteConfigRef) throw ErrRemoteConfigNotInitialiazed;
 
-    await this.remoteConfigRef.fetchAndActivate();
+    await fetchAndActivate(this.remoteConfigRef);
     return;
   }
 
@@ -90,7 +97,7 @@ export class FirebaseRemoteConfigWeb
       throw new Error(
         "Remote config is not initialized. Make sure initialize() is called at first."
       );
-    const retVal = this.remoteConfigRef.getValue(options.key);
+    const retVal = getValue(this.remoteConfigRef, options.key);
     return {
       key: options.key,
       value: (retVal as any)[`as${format}`](),

@@ -1,7 +1,7 @@
-import firebase from "firebase";
+import { FirebaseApp } from "firebase/app";
 
 export interface FirebaseRemoteConfigPlugin {
-  initializeFirebase(app: firebase.app.App): Promise<void>;
+  initializeFirebase(app: FirebaseApp): Promise<void>;
   setDefaultConfig(options: any): Promise<void>;
   initialize(options?: initOptions): Promise<void>;
   fetch(): Promise<void>;
